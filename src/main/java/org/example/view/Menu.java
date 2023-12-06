@@ -1,10 +1,13 @@
 package org.example.view;
 
+import org.example.autoexec.AutoExec;
 import org.example.controller.GameController;
 import org.example.controller.PlayerController;
+import org.example.controller.StaffController;
 import org.example.controller.TeamController;
 import org.example.entity.Game;
 import org.example.entity.Player;
+import org.example.entity.Staff;
 import org.example.entity.Team;
 
 import java.util.Scanner;
@@ -14,11 +17,13 @@ public class Menu {
   private GameController gameController;
   private TeamController teamController;
   private PlayerController playerController;
+  private StaffController staffController;
 
-  public Menu(GameController gameController, TeamController teamController, PlayerController playerController) {
+  public Menu(GameController gameController, TeamController teamController, PlayerController playerController, StaffController staffController) {
     this.gameController = gameController;
     this.teamController = teamController;
     this.playerController = playerController;
+    this.staffController = staffController;
   }
 
   public void showMainMenu() {
@@ -27,6 +32,8 @@ public class Menu {
     System.out.println("2. Teams");
     System.out.println("3. Players");
     System.out.println("4. Matches");
+    System.out.println("5. Staff");
+    System.out.println("8. Auto exec schema.sql & query.sql");
     handleMainMenu();
   }
 
@@ -47,6 +54,13 @@ public class Menu {
         break;
       case "4":
         showMatchesMenu();
+        break;
+      case "5":
+        showStaffMenu();
+        break;
+      case "8":
+        AutoExec.executeSchemaAndQuery();
+        showMainMenu();
         break;
       default:
         break;
@@ -78,8 +92,10 @@ public class Menu {
 
         if (gameController.save(new Game(gameName))) {
           System.out.println("✅ Game: " + gameName + " has been added");
+          showMainMenu();
         } else {
           System.out.println("❌ Game: " + gameName + " could not be added");
+          showMainMenu();
         }
         break;
       case "2":
@@ -120,7 +136,7 @@ public class Menu {
 
   private void handleTeamsMenu() {
     Scanner teamScanner = new Scanner(System.in);
-    System.out.print("Input choice: ");
+    System.out.print("Input choice 💬: ");
     String userChoice = teamScanner.nextLine();
     switch (userChoice) {
       case "1":
@@ -129,10 +145,11 @@ public class Menu {
         Team team = new Team();
         System.out.print("Add team 💬: ");
         String teamName = teamScanner.nextLine();
-        System.out.println("Input id for wich game:");
+        System.out.println("Games:");
         System.out.println("1: Counter-Strike 2");
         System.out.println("2: EA FC 24");
         System.out.println("3: League of Legends");
+        System.out.print("Input choice 💬: ");
         int gameId = teamScanner.nextInt();
 
         String nameOfGame = "";
@@ -146,8 +163,10 @@ public class Menu {
 
         if (teamController.save(new Team(teamName, gameId))) {
           System.out.println("✅ Team: " + teamName + " has been added for game: " + nameOfGame);
+          showMainMenu();
         } else {
           System.out.println("❌ Team: " + teamName + " could not be added");
+          showMainMenu();
         }
         break;
       case "2":
@@ -219,8 +238,10 @@ public class Menu {
 
         if (playerController.save(new Player(firstName, lastName, nickName, adress, zipCode, postalAdress, country, eMail, team_id))) {
           System.out.println("✅ Player: " + firstName + " '" + nickName + "' " + lastName + " has been added");
+          showMainMenu();
         } else {
           System.out.println("❌ Player: " + firstName + " '" + nickName + "' " + lastName + " could not be added");
+          showMainMenu();
         }
         break;
       case "2":
@@ -282,6 +303,63 @@ public class Menu {
         break;
       case "5":
         // List specific match by id
+        // call method
+        break;
+      case "6":
+        // Back to main menu
+        showMainMenu();
+        break;
+      default:
+        break;
+    }
+  }
+
+  public void showStaffMenu() {
+    System.out.println("Staff Menu:");
+    System.out.println("1. Hire new staff");
+    System.out.println("2. Update existing staff");
+    System.out.println("3. Fire staff");
+    System.out.println("4. List all staff");
+    System.out.println("5. List specific staff by id");
+    System.out.println("0. Back to Menu");
+    handleStaffMenu();
+  }
+
+  private void handleStaffMenu() {
+    Scanner staffScanner = new Scanner(System.in);
+    System.out.print("Input choice 💬: ");
+    String userChoice = staffScanner.nextLine();
+    switch (userChoice) {
+      case "1":
+        // Add Player
+        // call method
+        Staff staff = new Staff();
+        System.out.println("Add new Staff");
+        System.out.print("Input Name 💬: ");
+        String name = staffScanner.nextLine();
+
+        if (staffController.save(new Staff(name))) {
+          System.out.println("✅ Staff: " + name + " has been added");
+          showMainMenu();
+        } else {
+          System.out.println("❌ Staff: " + name + " could not be added");
+          showMainMenu();
+        }
+        break;
+      case "2":
+        // Update Player
+        // call method
+        break;
+      case "3":
+        // Delete Player
+        // call method
+        break;
+      case "4":
+        // List all Players
+        // call method
+        break;
+      case "5":
+        // List specific Player by id
         // call method
         break;
       case "6":
